@@ -1,6 +1,9 @@
 package accounts
 
-import "fmt"
+import (
+	"errors"
+	"fmt"
+)
 
 //Account struct
 type Account struct {
@@ -25,7 +28,13 @@ func (a Account) Balance() int {
 	return a.balance
 }
 
+var errWithDraw = errors.New("can't Widthdraw")
+
 // Withdraw x amount from your account
-func (a *Account) Withdraw(amount int) {
+func (a *Account) Withdraw(amount int) error {
+	if a.balance < amount {
+		return errWithDraw
+	}
 	a.balance -= amount
+	return nil
 }
