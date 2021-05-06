@@ -9,6 +9,7 @@ var (
 	errNotFound   = errors.New("Not Found")
 	errCantUpdate = errors.New("Cant update non-existing")
 	errWordExists = errors.New("That word already exists")
+	errCantDelete = errors.New("Cant delete non-existing")
 )
 
 //Search for a word
@@ -40,6 +41,18 @@ func (d Dictionary) Update(word, definition string) error {
 		d[word] = definition
 	case errNotFound:
 		return errCantUpdate
+	}
+	return nil
+}
+
+// Delete a word dictionary
+func (d Dictionary) Delete(word string) error {
+	_, err := d.Search(word)
+	switch err {
+	case nil:
+		delete(d, word)
+	case errNotFound:
+		return errCantDelete
 	}
 	return nil
 }

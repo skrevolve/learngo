@@ -42,11 +42,17 @@ func main() {
 	// 	fmt.Println(err2)
 	// }
 	dictionary.Add(baseWord, "first")
-	err := dictionary.Update(baseWord, "second")
+	// err := dictionary.Update("asdfasdf", "second")
+	// if err != nil {
+	// 	fmt.Println(err)
+	// }
+	dictionary.Search(baseWord)
+	dictionary.Delete(baseWord)
+	word, err := dictionary.Search(baseWord)
 	if err != nil {
 		fmt.Println(err)
+	} else {
+		fmt.Println(word)
 	}
-
-	word, _ := dictionary.Search(baseWord)
 	fmt.Println(word)
 }
