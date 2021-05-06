@@ -121,6 +121,14 @@ import (
 	"github.com/PuerkitoBio/goquery" //you have to download in $GOPATH(/src/github.com/)
 )
 
+type extractedJob struct {
+	id       string
+	title    string
+	location string
+	salary   string
+	summary  string
+}
+
 var baseURL string = "https://kr.indeed.com/jobs?q=python&limit=50"
 
 func main() {
@@ -133,7 +141,25 @@ func main() {
 func getPage(page int) {
 	pageURL := baseURL + "&start=" + strconv.Itoa(page*50)
 	fmt.Println("Requesting", pageURL)
+	res, err := http.Get(pageURL)
+	checkErr(err)
+	checkStatusCode(res)
+	defer res.Body.Close()
+	doc, err := goquery.NewDocumentFromReader(res.Body)
+	checkErr(err)
+	searchCards := doc.Find(".jobsearch-SerpJobCard ")
+	searchCards.Each(func(i int, card *goquery.Selection) {
+		id, _ := card.Attr("data-jk")
+		title := card.Find(".title>a").Text()
+		location := card.Find(".sjcl").Text()
+		fmt.Println(id, title, location)
+	})
 }
+
+func cleanString(str string) string {
+
+}
+
 func getPages() int {
 	pages := 0
 	res, err := http.Get(baseURL)
