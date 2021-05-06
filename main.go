@@ -155,7 +155,7 @@ func writeJobs(jobs []extractedJob) {
 	checkErr(wErr)
 	for _, job := range jobs {
 		jobSlice := []string{
-			job.id,
+			"https://kr.indeed.com/viewjob?jk=" + job.id,
 			job.title,
 			job.location,
 			job.salary,
