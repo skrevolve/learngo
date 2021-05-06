@@ -58,53 +58,89 @@
 // }
 // --------------------------------------------
 
+// package main
+
+// import (
+// 	"errors"
+// 	"fmt"
+// 	"net/http"
+// )
+
+// var errorRequestFailed = errors.New("Request failed")
+
+// type requestResult struct {
+// 	url    string
+// 	status string
+// }
+
+// func main() {
+// 	results := make(map[string]string)
+// 	c := make(chan requestResult)
+// 	urls := []string{
+// 		"https://www.airbnb.com",
+// 		"https://www.google.com",
+// 		"https://www.amazon.com",
+// 		"https://www.reddit.com",
+// 		"https://www.facebook.com",
+// 		"https://www.instagram.com",
+// 		"https://soundcloud.com",
+// 	}
+
+// 	for _, url := range urls {
+// 		go hitURL(url, c)
+// 	}
+
+// 	for i := 0; i < len(urls); i++ {
+// 		result := <-c
+// 		results[result.url] = result.status
+// 	}
+
+// 	for url, status := range results {
+// 		fmt.Println(url, status)
+// 	}
+// }
+
+// func hitURL(url string, c chan<- requestResult) {
+// 	resp, err := http.Get(url)
+// 	status := "OK"
+// 	if err != nil || resp.StatusCode >= 400 {
+// 		status = "FAILED"
+// 	}
+// 	c <- requestResult{url: url, status: status}
+// }
+// -------------------------------------------------------
+
 package main
 
 import (
-	"errors"
-	"fmt"
+	"log"
 	"net/http"
+
+	"github.com/PuerkitoBio/goquery"
 )
 
-var errorRequestFailed = errors.New("Request failed")
-
-type requestResult struct {
-	url    string
-	status string
-}
+var baseURL = "https://kr.indeed.com/jobs?q=python&limit=50"
 
 func main() {
-	results := make(map[string]string)
-	c := make(chan requestResult)
-	urls := []string{
-		"https://www.airbnb.com",
-		"https://www.google.com",
-		"https://www.amazon.com",
-		"https://www.reddit.com",
-		"https://www.facebook.com",
-		"https://www.instagram.com",
-		"https://soundcloud.com",
-	}
+	pages := getPages()
+}
 
-	for _, url := range urls {
-		go hitURL(url, c)
-	}
+func getPages() int {
+	res, err := http.Get(baseURL)
+	checkErr(err)
+	checkStatusCode(res)
+	doc, err := goquery.NewDocumentFromReader(res.Body)
+	return 0
+}
 
-	for i := 0; i < len(urls); i++ {
-		result := <-c
-		results[result.url] = result.status
-	}
-
-	for url, status := range results {
-		fmt.Println(url, status)
+func checkErr(err error) {
+	if err != nil {
+		log.Fatalln(err)
 	}
 }
 
-func hitURL(url string, c chan<- requestResult) {
-	resp, err := http.Get(url)
-	status := "OK"
-	if err != nil || resp.StatusCode >= 400 {
-		status = "FAILED"
+func checkStatusCode(res *http.Response) {
+	if res.StatusCode != 200 {
+		log.Fatalln("Request failed with Status : ", res.StatusCode)
 	}
-	c <- requestResult{url: url, status: status}
 }
