@@ -27,11 +27,26 @@ import (
 )
 
 func main() {
-	dictionary := mydict.Dictionary{"first": "firstword"}
-	definition, err := dictionary.Search("first")
+	dictionary := mydict.Dictionary{}
+	baseWord := "hello"
+	// definition := "Greeting"
+	// err := dictionary.Add(word, definition)
+	// if err != nil {
+	// 	fmt.Println(err)
+	// }
+	// hello, _ := dictionary.Search(word)
+	// fmt.Println(hello)
+
+	// err2 := dictionary.Add(word, definition)
+	// if err2 != nil {
+	// 	fmt.Println(err2)
+	// }
+	dictionary.Add(baseWord, "first")
+	err := dictionary.Update(baseWord, "second")
 	if err != nil {
 		fmt.Println(err)
-	} else {
-		fmt.Println(definition)
 	}
+
+	word, _ := dictionary.Search(baseWord)
+	fmt.Println(word)
 }
