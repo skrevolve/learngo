@@ -58,7 +58,7 @@
 // }
 // --------------------------------------------
 
-package main
+package example_test
 
 import (
 	"errors"
@@ -73,7 +73,8 @@ type requestResult struct {
 	status string
 }
 
-func main() {
+// for Test Code
+func ForExampleTestCode() {
 	results := make(map[string]string)
 	c := make(chan requestResult)
 	urls := []string{
