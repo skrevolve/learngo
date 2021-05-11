@@ -1,2 +1,2 @@
 # learngo
-Golang 첫 시작
+webCrolling in Indeed.com by keyword
